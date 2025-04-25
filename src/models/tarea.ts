@@ -1,9 +1,21 @@
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+
+@Entity()
 export class Tarea {
-    constructor (
-        private id: number,
-        private nombre: string,
-        private descripcion: string
-    ) {}
+    
+    @PrimaryGeneratedColumn()
+    public id!: number;
+
+    @Column()
+    public nombre!: string;
+
+    @Column()
+    public descripcion!: string;
+
+    constructor(nombre?: string, descripcion?: string) {
+        if (nombre) this.nombre = nombre;
+        if (descripcion) this.descripcion = descripcion;
+    } 
 
     public getId(): number {
         return this.id;
