@@ -4,12 +4,12 @@ import { TareaHandler } from '../handlers/tareaHandler';
 const router = express.Router();
 const handler = new TareaHandler();
 
-router.get('/', (_req: Request, res: Response) => {
-    const tareas = handler.getAll();
+router.get('/', async (_req: Request, res: Response) => {
+    const tareas = await handler.getAll();
     res.status(200).json(tareas);
 });
 
-router.post('/', (req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
     const { nombre, descripcion } = req.body;
     
     if (typeof nombre !== 'string' || typeof descripcion !== 'string') {
@@ -17,11 +17,11 @@ router.post('/', (req: Request, res: Response) => {
         return;
     }
 
-    const tarea = handler.create(nombre, descripcion);
+    const tarea = await handler.create(nombre, descripcion);
     res.status(201).json(tarea);
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
     if (isNaN(id)) {
         res.status(400).json({ mensaje: 'ID invalido' });
@@ -29,7 +29,7 @@ router.put('/:id', (req, res) => {
     }
 
     const { nombre, descripcion} = req.body;
-    const updated = handler.update(id, nombre, descripcion);
+    const updated = await handler.update(id, nombre, descripcion);
 
     if (!updated) {
         res.status(404).json({ mensaje: 'Tarea no encontrada' });
@@ -39,14 +39,14 @@ router.put('/:id', (req, res) => {
     res.status(200).json(updated);
 });
 
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
     if (isNaN(id)) {
         res.status(400).json({ mensaje: 'ID invalido' });
         return;
     }
 
-    const deleted = handler.delete(id);
+    const deleted = await handler.delete(id);
     if (!deleted) {
         res.status(404).json({ mensaje: 'Tarea no encontrada' });
         return;
